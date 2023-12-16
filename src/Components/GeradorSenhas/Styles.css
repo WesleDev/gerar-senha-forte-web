@@ -81,3 +81,7 @@ h1 {
   color: #e30842;
   cursor: pointer;
 }
+
+.cliploader {
+  margin-top: 20px;
+}

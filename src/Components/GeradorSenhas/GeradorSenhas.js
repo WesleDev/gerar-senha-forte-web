@@ -3,15 +3,18 @@ import axios from 'axios';
 import './Styles.css';
 import { useNavigate } from 'react-router-dom';
 import copy from 'clipboard-copy';
+import { ClipLoader } from 'react-spinners';
 
 const GeradorSenhas = () => {
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
   const [tamanho, setTamanho] = useState(8);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const gerarSenha = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `https://passwordev.onrender.com/api/gerarSenha?nome=${nome}&tamanho=${tamanho}`
@@ -22,6 +25,8 @@ const GeradorSenhas = () => {
       setNome('');
     } catch (error) {
       alert('Erro ao gerar a senha');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +46,6 @@ const GeradorSenhas = () => {
   return (
     <div className='container'>
       <h1>Gerador de Senhas</h1>
-
       <div className='usernameLabel'>Nome da Aplicação (opcional)</div>
       <input
         className='input'
@@ -50,7 +54,6 @@ const GeradorSenhas = () => {
         onChange={(e) => setNome(e.target.value)}
         placeholder='Digite o nome para salvar no banco'
       />
-
       <div className='tamanhoSenhaLabel'>Tamanho da Senha: {tamanho}</div>
       <input
         className='slider'
@@ -61,20 +64,27 @@ const GeradorSenhas = () => {
         value={tamanho}
         onChange={(e) => setTamanho(parseInt(e.target.value, 10))}
       />
-
       <button className='button' onClick={gerarSenha}>
         Gerar Senha
       </button>
 
-      {senha && (
-        <div className='senhaContainer'>
-          <div className='resultLabel'>Senha Gerada:</div>
-          <div className='senhaBox' onClick={() => copiarSenha(senha)}>
-            <div className='resultSenha'>{senha}</div>
+      {loading ? (
+        <ClipLoader
+          className='cliploader'
+          color='#e30842'
+          size={50}
+          loading={loading}
+        />
+      ) : (
+        senha && (
+          <div className='senhaContainer'>
+            <div className='resultLabel'>Senha Gerada:</div>
+            <div className='senhaBox' onClick={() => copiarSenha(senha)}>
+              <div className='resultSenha'>{senha}</div>
+            </div>
           </div>
-        </div>
+        )
       )}
-
       <button className='button' onClick={irParaListaSenhas}>
         Ir para Lista de Senhas
       </button>

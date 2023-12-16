@@ -6,9 +6,11 @@ import { MdContentCopy, MdZoomOut, MdDeleteOutline } from 'react-icons/md'; // I
 import './styles.css'; // Importe o arquivo de estilos
 import copy from 'clipboard-copy';
 import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 
 const HistoricoSenhas = () => {
   const [senhas, setSenhas] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +26,8 @@ const HistoricoSenhas = () => {
       setSenhas(response.data);
     } catch (error) {
       console.error('Erro ao obter as senhas:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,8 +59,9 @@ const HistoricoSenhas = () => {
   return (
     <div className='container'>
       <h1>Senhas Cadastradas</h1>
-
-      {senhas.length > 0 ? (
+      {loading ? (
+        <ClipLoader color='#e30842' size={50} loading={loading} />
+      ) : senhas.length > 0 ? (
         <ul className='listaSenhas'>
           {senhas.map((senha) => (
             <li key={senha.id} className='itemSenha'>
