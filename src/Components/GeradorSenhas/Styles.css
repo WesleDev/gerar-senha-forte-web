@@ -85,3 +85,19 @@ h1 {
 .cliploader {
   margin-top: 20px;
 }
+
+.checkBoxContainer {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  
+}
+
+.checkBoxContainer label {
+  display: flex;
+}
+
+.checkBoxContainer input {
+  margin-right: 10px;
+  display: flex;
+  justify-content: space-between;
+}

@@ -9,25 +9,32 @@ const GeradorSenhas = () => {
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
   const [tamanho, setTamanho] = useState(8);
+  const [tipo, setTipo] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const gerarSenha = async () => {
     setLoading(true);
-    try {
-      const response = await axios.post(
-        `https://passwordev.onrender.com/api/gerarSenha?nome=${nome}&tamanho=${tamanho}`
-        //`http://localhost:8080/api/gerarSenha?nome=${nome}&tamanho=${tamanho}`
-      );
 
-      setSenha(response.data);
-      setNome('');
-    } catch (error) {
-      alert('Erro ao gerar a senha');
-    } finally {
-      setLoading(false);
-    }
+    const tempoResposta = 200;
+
+    const tempo = setTimeout(async () => {
+      try {
+        const response = await axios.post(
+          `https://passwordev.onrender.com/api/gerarSenha?nome=${nome}&tamanho=${tamanho}&tipo=${tipo}`
+          //`http://localhost:8080/api/gerarSenha?nome=${nome}&tamanho=${tamanho}&tipo=${tipo}`
+        );
+
+        setSenha(response.data);
+        setNome('');
+      } catch (error) {
+        alert('Erro ao gerar a senha');
+      } finally {
+        setLoading(false);
+      }
+    }, tempoResposta);
+    return () => clearTimeout(tempo);
   };
 
   const copiarSenha = async (senha) => {
@@ -64,6 +71,17 @@ const GeradorSenhas = () => {
         value={tamanho}
         onChange={(e) => setTamanho(parseInt(e.target.value, 10))}
       />
+      <div className='checkBoxContainer'>
+        <label>
+          <input
+            type='checkbox'
+            checked={tipo === 1}
+            onChange={() => setTipo(tipo === 1 ? 0 : 1)}
+          />
+          Caractere Especial
+        </label>
+      </div>
+
       <button className='button' onClick={gerarSenha}>
         Gerar Senha
       </button>

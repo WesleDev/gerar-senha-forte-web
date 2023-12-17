@@ -20,8 +20,8 @@ const HistoricoSenhas = () => {
   const obterSenhas = async () => {
     try {
       const response = await axios.get(
-        'https://passwordev.onrender.com/api/senhas'
-        //'http://localhost:8080/api/senhas'
+        //'https://passwordev.onrender.com/api/senhas'
+        'http://localhost:8080/api/senhas'
       );
       setSenhas(response.data);
     } catch (error) {
@@ -43,8 +43,8 @@ const HistoricoSenhas = () => {
   const deletarSenha = async (id) => {
     try {
       await axios.delete(
-        `https://passwordev.onrender.com/api/${id}`
-        //`http://localhost:8080/api/${id}`
+        //`https://passwordev.onrender.com/api/${id}`
+        `http://localhost:8080/api/${id}`
       );
       obterSenhas(); // Atualiza a lista após a exclusão
     } catch (error) {
