@@ -9,7 +9,8 @@ const GeradorSenhas = () => {
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
   const [tamanho, setTamanho] = useState(8);
-  const [tipo, setTipo] = useState(0);
+  const [tipoCaractere, setTipoCaractere] = useState(0);
+  const [tipoNumero, setTipoNumero] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -22,8 +23,8 @@ const GeradorSenhas = () => {
     const tempo = setTimeout(async () => {
       try {
         const response = await axios.post(
-          `https://passwordev.onrender.com/api/gerarSenha?nome=${nome}&tamanho=${tamanho}&tipo=${tipo}`
-          //`http://localhost:8080/api/gerarSenha?nome=${nome}&tamanho=${tamanho}&tipo=${tipo}`
+          `https://passwordev.onrender.com/api/gerarSenha?nome=${nome}&tamanho=${tamanho}&tpCaractere=${tipoCaractere}&tpNumero=${tipoNumero}`
+          //`http://localhost:8080/api/gerarSenha?nome=${nome}&tamanho=${tamanho}&tpCaractere=${tipoCaractere}&tpNumero=${tipoNumero}`
         );
 
         setSenha(response.data);
@@ -48,6 +49,16 @@ const GeradorSenhas = () => {
 
   const irParaListaSenhas = () => {
     navigate('/historico-senhas');
+  };
+
+  const handleCheckBoxCaractereChange = () => {
+    setTipoCaractere(1);
+    setTipoNumero('');
+  };
+
+  const handleCheckBoxNumeroChange = () => {
+    setTipoNumero('S');
+    setTipoCaractere(0);
   };
 
   return (
@@ -75,10 +86,18 @@ const GeradorSenhas = () => {
         <label>
           <input
             type='checkbox'
-            checked={tipo === 1}
-            onChange={() => setTipo(tipo === 1 ? 0 : 1)}
+            checked={tipoCaractere === 1}
+            onChange={handleCheckBoxCaractereChange}
           />
-          Caractere Especial
+          Caractere Especial |
+        </label>
+        <label className='labelCheckBox'>
+          <input
+            type='checkbox'
+            checked={tipoNumero === 'S'}
+            onChange={handleCheckBoxNumeroChange}
+          />
+          Somente Números
         </label>
       </div>
 
